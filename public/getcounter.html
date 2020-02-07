@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>getCounter</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
+</head>
+
+<body class="with-top-navbar">
+    <div class="container-fluid container-fluid-spacious">
+        <div class="dashhead mt-4">
+            <div class="dashhead-titles">
+                <h6 class="dashhead-subtitle">Counter</h6>
+                <h2 class="dashhead-title" id="counter">Overview</h2>
+            </div>
+        </div>
+    </div>
+    <script>
+    const counter = document.getElementById('counter');
+    writeCounter = str => counter.textContent = str;
+
+    async function getSensors() {
+        const response = await fetch('/sensors');
+        const myJson = await response.json();
+        writeCounter(myJson.counter);
+    }
+
+    getSensors();
+    </script>
+</body>
+
+</html>
