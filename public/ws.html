@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>getCounter</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
+    <link href="assets/css/toolkit-light.css" rel="stylesheet">
+    <link href="assets/css/application.css" rel="stylesheet">
+</head>
+
+<body class="with-top-navbar">
+    <div class="container-fluid container-fluid-spacious">
+        <div class="dashhead mt-4">
+            <div class="dashhead-titles">
+                <h6 class="dashhead-subtitle">Counter</h6>
+                <h2 class="dashhead-title" id="counter">Overview</h2>
+            </div>
+        </div>
+                <pre id="sensors">0</pre>
+
+    </div>
+    <script>
+    const counter = document.getElementById('counter');
+    const sensorDiv = document.getElementById('sensors');
+    writeCounter = str => counter.textContent = str;
+    writeSensors = str => sensorDiv.textContent = str;
+
+    async function getSensors() {
+        const response = await fetch('/sensors');
+        const myJson = await response.json();
+        writeCounter(myJson.counter);
+    }
+
+    getSensors();
+
+    var host = window.document.location.host;
+    var ws = new WebSocket('wss://' + host);
+    ws.onmessage = function(event) {
+        const data = JSON.parse(event.data)
+       // console.log(data);
+        writeCounter(data.counter)
+        let sensorsNow = JSON.stringify(data, null, 2)
+        writeSensors(sensorsNow);
+
+    };
+    </script>
+</body>
+
+</html>
